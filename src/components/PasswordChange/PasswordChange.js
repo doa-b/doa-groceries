@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
-import {withFirebase} from '../../components/Firebase';
+import {withFirebase} from '../Firebase';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';

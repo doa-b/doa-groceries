@@ -40,7 +40,7 @@ const styles = theme => ({
 });
 
 const MyToolbar = withStyles(styles)(
-    ({classes, title, onMenuClick, isLive, showName, showAllScenes, setShowAllScenes}) => (
+    ({classes, title, onMenuClick, showAllScenes, setShowAllScenes}) => (
         <>
             <AppBar className={classes.aboveDrawer}>
                 <Toolbar className={classes.toolBar}>

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {compose} from 'redux';
-import {withFirebase} from '../Firebase';
+import {withFirebase} from '../../components/Firebase';
 import {convertObjectstoArray} from '../../shared/utility';
 import * as ACCESSLEVEL from '../../shared/accessLevel'
-import {withAuthorization} from '../Session';
+import {withAuthorization} from '../../components/Session';
 
 class AdminPage extends Component {
     constructor(props) {

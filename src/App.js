@@ -7,34 +7,34 @@ import * as ROUTES from './shared/routes';
 import { withAuthentication } from './components/Session'
 
 const landingPage = asyncComponent(() => {
-    return import ('./components/Landing/Landing')
+    return import ('./pages/Landing/Landing')
 });
 
 const signUpPage = asyncComponent(() => {
-    return import ('./authentication/SignUp/SignUp')
+    return import ('./pages/authentication/SignUp/SignUp')
 });
 
 const signInPage = asyncComponent(() => {
-    return import ('./authentication/SignIn/SignIn')
+    return import ('./pages/authentication/SignIn/SignIn')
 });
 
 const signOutPage = asyncComponent(() => {
-    return import ('./authentication/SignOut/SignOut')
+    return import ('./pages/authentication/SignOut/SignOut')
 });
 const homePage = asyncComponent(() => {
-    return import ('./components/Home/Home')
+    return import ('./pages/Home/Home')
 });
 const accountPage = asyncComponent(() => {
-    return import ('./authentication/Account/Account')
+    return import ('./pages/authentication/Account/Account')
 });
 const adminPage = asyncComponent(() => {
-    return import ('./components/Admin/Admin')
+    return import ('./pages/Admin/Admin')
 });
 const passwordForgetPage = asyncComponent(() => {
-    return import ('./authentication')
+    return import ('./pages/authentication/PasswordForget/PasswordForget')
 });
 const privacyPolicyPage = asyncComponent(() => {
-    return import ('./PrivacyPolicy/PrivacyPolicy')
+    return import ('./pages/PrivacyPolicy/PrivacyPolicy')
 });
 const detailsPage = asyncComponent(() => {
     return import ('./pages/details')

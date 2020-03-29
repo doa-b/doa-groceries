@@ -1,6 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject} from "../../shared/utility";
-import {getDummyData} from "../../bootstrap/data";
+import {getDummyData} from '../../bootstrap/data';
 
 const initialState = getDummyData();
 

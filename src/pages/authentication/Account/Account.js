@@ -1,11 +1,11 @@
 import React from 'react';
-import {withAuthorization, AuthUserContext} from '../../components/Session';
+import {withAuthorization, AuthUserContext} from '../../../components/Session';
 import {compose} from 'redux';
-import {PasswordForgetForm} from '..';
-import {PasswordChange} from '..';
-import UserInfo from '../../forms/UserInfo';
+import {PasswordForgetForm} from '../index';
+import {PasswordChange} from '../index';
+import UserInfo from '../../../forms/UserInfo';
 
-import {withFirebase} from '../../components/Firebase';
+import {withFirebase} from '../../../components/Firebase';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -14,8 +14,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import Uppload from '../../components/FileUpload/ImageUppload';
-import {updateObject} from '../../shared/utility';
+import Uppload from '../../../components/FileUpload/ImageUppload';
+import {updateObject} from '../../../shared/utility';
 
 const styles = theme => ({
     '@global': {

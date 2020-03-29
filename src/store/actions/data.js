@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes'
-import Firebase from "../../components/Firebase";
-import {convertObjectstoArray} from "../../shared/utility";
-import {getDummyData} from "../../bootstrap/data";
+import {convertObjectstoArray} from '../../shared/utility';
+import {getDummyData} from '../../bootstrap/data';
 
 // async actionDispatchers
 

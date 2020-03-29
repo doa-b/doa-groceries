@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {Route, NavLink, Switch} from 'react-router-dom';
-import {connect} from "react-redux";
 import clsx from 'clsx';
-import * as actions from '../../../store/actions'
 import * as ROUTES from '../../../shared/routes';
 import * as ACCESSLEVEL from '../../../shared/accessLevel';
 import { AuthUserContext } from '../../Session'
@@ -23,7 +21,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import {withFirebase} from "../../Firebase";
+import {withFirebase} from '../../Firebase';
 
 const styles = theme => ({
     root: {
@@ -62,8 +60,6 @@ const MySideDrawer = withStyles(styles)(
          classes, variant, open, onClose, onItemClick, firebase
 
      }) => {
-        const [setting1, toggleSetting1] = useState(false);
-
         const SideDrawerNonAuth = () => (
             <List>
                 <Typography className={classes.nonAuth} variant='subtitle1' >

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {compose} from "redux";
+import {compose} from 'redux';
 import withStyles from '@material-ui/core/styles/withStyles'
-import {AuthUserContext, withAuthorization} from '../Session/';
-import {Select} from "@material-ui/core";
+import {AuthUserContext, withAuthorization} from '../../components/Session';
+import {Select} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
-import {IconButton} from "@material-ui/core";
+import {IconButton} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -15,12 +15,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import LabelIcon from '@material-ui/icons/Label';
 import AddIcon from '@material-ui/icons/Add';
 import ListItemText from '@material-ui/core/ListItemText';
-import {withFirebase} from "../Firebase";
-import * as actions from "../../store/actions";
-import {connect} from "react-redux";
-import {compareValues} from "../../shared/utility";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
+import {withFirebase} from '../../components/Firebase';
+import * as actions from '../../store/actions';
+import {connect} from 'react-redux';
+import {compareValues} from '../../shared/utility';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 
 const styles = theme => ({
     root: {

@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {compose} from 'redux';
 import { SignUpLink } from '../SignUp/SignUp';
-import {PasswordForgetLink} from '..';
-import { withFirebase} from '../../components/Firebase';
-import * as ROUTES from '../../shared/routes';
+import {PasswordForgetLink} from '../index';
+import { withFirebase} from '../../../components/Firebase';
+import * as ROUTES from '../../../shared/routes';
 import {withStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -115,7 +115,7 @@ class SignInPage extends Component {
                         >
                             Sign In
                         </Button>
-                        {error && <p className={classes.error}>{error.messageMessage}</p>}
+                        {error && <p className={classes.error}>{error.message}</p>}
                     </form>
                     <PasswordForgetLink/>
                     <SignUpLink/>
