@@ -17,7 +17,15 @@ IT contains all the basic code for use as a templete for future react projects. 
 
 # Lazy loading
 
-## USAGE: Clone it to a new repo:
+## USAGE: Import it into new repository
+Click on + in menu. choose import repository
+clone your new repository to local
+make a new firebase project
+Initialize auth with email-password
+Initialize storage bucket and real time database
+Initialize web. This gives you the config you can copy to kluisje in src folger
+
+## USAGE: Clone it to a new repo (legacy):
 git clone https://github.com/userName/Repo New_Repo  
 cd New_Repo  
 git remote set-url origin https://github.com/userName/New_Repo  
