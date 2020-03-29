@@ -6,7 +6,8 @@ export const ACCOUNT = '/account';
 export const ADMIN = '/admin';
 export const PASSWORD_FORGET = '/pw-forget';
 export const SIGN_OUT = '/signout';
-export const PRIVACY_POLICY = '/privacy-policy'
+export const PRIVACY_POLICY = '/privacy-policy';
+export const DETAILS = '/details';
 
 export const pageTitle = (route) => {
     switch (route) {
@@ -18,6 +19,7 @@ export const pageTitle = (route) => {
         case ADMIN: return 'Admin';
         case PASSWORD_FORGET: return 'Forgot Password';
         case PRIVACY_POLICY: return 'Privacy Policy';
+        case DETAILS: return 'Details';
         default: return 'home'
     }
 };

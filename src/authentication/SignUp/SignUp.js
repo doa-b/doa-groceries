@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import * as ROUTES from '../../shared/routes';
 import {withFirebase} from '../../components/Firebase'
 import {compose} from 'redux';
@@ -15,6 +15,11 @@ const SignUpPage = (props) => {
                 // remove password
                 delete userData.password;
                 delete userData.passwordConfirmation;
+                userData.preferences = {
+                    sortBy: 'category',
+                    isAscending: false,
+                    showDetails: false,
+                };
                 // Create a user in firebase realtime database
                 return props.firebase
                     .user(authUser.user.uid)
@@ -30,9 +35,11 @@ const SignUpPage = (props) => {
     return (
         <div>
             <UserInfo
-                handleSubmit={(values) => {onSubmit(values)}}
+                handleSubmit={(values) => {
+                    onSubmit(values)
+                }}
                 buttonLabel='Sign Up'/>
-                {error && <p>{error.message}</p>}
+            {error && <p>{error.message}</p>}
         </div>
     );
 };

@@ -62,6 +62,14 @@ class Firebase {
     user = uid => this.db.ref(`users/${uid}`);
     users = () => this.db.ref('users');
 
+    // *** Preferences ***
+    setPreferences = (preferences) => this.user(this.auth.currentUser.uid).child(`preferences`).update(preferences);
+
+    // *** Data ***
+    setData = (data) => this.db.ref(`data/${this.auth.currentUser.uid}`).push().update(data);
+
+    data = () => this.db.ref(`data/${this.auth.currentUser.uid}`);
+
     // *** Storage API ***
 
     image = image => this.storage.ref(`images/${image.name}`);

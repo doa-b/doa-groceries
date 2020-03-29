@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {Route, NavLink, Switch} from 'react-router-dom';
+import {connect} from "react-redux";
 import clsx from 'clsx';
+import * as actions from '../../../store/actions'
 import * as ROUTES from '../../../shared/routes';
 import * as ACCESSLEVEL from '../../../shared/accessLevel';
 import { AuthUserContext } from '../../Session'
@@ -21,6 +23,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import {withFirebase} from "../../Firebase";
 
 const styles = theme => ({
     root: {
@@ -56,9 +59,8 @@ const styles = theme => ({
 
 const MySideDrawer = withStyles(styles)(
     ({
-         classes, variant, open, onClose, onItemClick,
-         showSeconds, toggleShowSeconds, displayRealTime, toggleDisplayRealTime,
-         isEditable, toggleIsEditable, isLive
+         classes, variant, open, onClose, onItemClick, firebase
+
      }) => {
         const [setting1, toggleSetting1] = useState(false);
 
@@ -110,11 +112,11 @@ const MySideDrawer = withStyles(styles)(
                 </ListSubheader>
                 <ListItem>
                     <Checkbox
-                        value={setting1}
-                        onChange={()=> toggleSetting1(!setting1)}
-                        checked={setting1}/>
+                        value={authUser.preferences.showDetails}
+                        onChange={()=> firebase.setPreferences({showDetails: !authUser.preferences.showDetails})}
+                        checked={authUser.preferences.showDetails}/>
                     <ListItemText>
-                       Dummy Setting
+                       Show Details
                     </ListItemText>
                 </ListItem>
                 <ListSubheader>
@@ -196,4 +198,4 @@ const NavItem = props => (
     </Switch>
 );
 
-export default MySideDrawer;
+export default withFirebase(MySideDrawer);
