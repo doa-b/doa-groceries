@@ -1,5 +1,8 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import { compose } from "redux";
 import {AuthUserContext} from '../../Session'
+import {withFirebase} from "../../Firebase";
 
 import {Tooltip, withStyles} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar/AppBar';
@@ -8,9 +11,10 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import Badge from "@material-ui/core/Badge";
 
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import UnfoldLessIcon from '@material-ui/icons/UnfoldLess';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
+import ListAltIcon from '@material-ui/icons/ListAltOutlined';
 
 
 
@@ -40,53 +44,66 @@ const styles = theme => ({
 });
 
 const MyToolbar = withStyles(styles)(
-    ({classes, title, onMenuClick, showAllScenes, setShowAllScenes}) => (
-        <>
-            <AppBar className={classes.aboveDrawer}>
-                <Toolbar className={classes.toolBar}>
-                    <IconButton
-                        className={classes.menuButton}
-                        color='inherit'
-                        aria-label='Menu'
-                        onClick={onMenuClick}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography
-                        variant='h5'
-                        color='inherit'
-                        className={classes.flex}
-                    >
-                        {title}
-                    </Typography>
-                    {(title === 'Schedule') ? (
+    ({classes, title, onMenuClick, firebase, data}) => {
+        const itemCounter = data.filter(item => item.mustBuy === true).length;
+
+        return (
+            <>
+                <AppBar className={classes.aboveDrawer}>
+                    <Toolbar className={classes.toolBar}>
                         <IconButton
-                            className={classes.fold}
+                            className={classes.menuButton}
                             color='inherit'
-                            aria-label='Fold'
-                            onClick={() => setShowAllScenes(!showAllScenes)}
+                            aria-label='Menu'
+                            onClick={onMenuClick}
                         >
-                            <Tooltip title='show/hide scenes' placement='left-end'>
-                                {(showAllScenes) ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
-                            </Tooltip>
+                            <MenuIcon/>
                         </IconButton>
-                    ) : null}
-                    <div className={classes.corner}>
-                    </div>
-                    <AuthUserContext.Consumer>
-                        {authUser => authUser ? (
-                            <Avatar
+                        <Typography
+                            variant='h5'
+                            color='inherit'
+                            className={classes.flex}
+                        >
+                            {title}
+                        </Typography>
+                        <div className={classes.corner}>
+                        </div>
+                        <AuthUserContext.Consumer>
+                            {authUser => authUser ? (
+                                <>
+                                    <IconButton color="inherit"
+                                                onClick={()=> firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}>
+                                        <Badge badgeContent={itemCounter} color="secondary"
+                                               anchorOrigin={{horizontal: "right", vertical: "top"}}>
+                                            {authUser.preferences.isBuying
+                                                ? <ListAltIcon fontSize="large" />
+                                                : <ShoppingCartIcon fontSize="large"/>}
+                                        </Badge>
 
-                                alt='logged in user'
-                                src={authUser.imageUrl}/>
-                        ) : null}
+                                    </IconButton>
+                                    <Avatar
+                                        alt='logged in user'
+                                        src={authUser.imageUrl}/>
+                                </>
 
-                    </AuthUserContext.Consumer>
-                </Toolbar>
-            </AppBar>
-            <div className={classes.toolbarMargin}/>
-        </>
-    )
+                            ) : null}
+
+                        </AuthUserContext.Consumer>
+                    </Toolbar>
+                </AppBar>
+                <div className={classes.toolbarMargin}/>
+            </>
+        )
+    }
 );
 
-export default MyToolbar;
+const mapStateToProps = (state) => {
+    return {
+        data: state.data
+    }
+};
+
+export default compose(
+    withFirebase,
+    connect(mapStateToProps)
+)(MyToolbar);

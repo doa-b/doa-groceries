@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
-import {getDummyData} from '../../bootstrap/data';
+import {getDoaData} from '../../bootstrap/data';
 
-const initialState = getDummyData();
+const initialState = getDoaData();
 
 
 const reducer = (state = initialState, action) => {

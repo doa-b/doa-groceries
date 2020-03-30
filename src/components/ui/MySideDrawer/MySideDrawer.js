@@ -115,6 +115,15 @@ const MySideDrawer = withStyles(styles)(
                        Show Details
                     </ListItemText>
                 </ListItem>
+                <ListItem>
+                    <Checkbox
+                        value={authUser.preferences.isBuying}
+                        onChange={()=> firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}
+                        checked={authUser.preferences.isBuying}/>
+                    <ListItemText>
+                        Show cart
+                    </ListItemText>
+                </ListItem>
                 <ListSubheader>
                     Navigation
                 </ListSubheader>

@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes'
 import {convertObjectstoArray} from '../../shared/utility';
-import {getDummyData} from '../../bootstrap/data';
+import {getDoaData} from '../../bootstrap/data';
 
 // async actionDispatchers
 
@@ -8,8 +8,15 @@ export const addItem = (firebase, item) => async dispatch => {
     firebase.setData(item)
 };
 
+export const saveItem = (firebase, item) => async dispatch => {
+    const id = item.id;
+    delete item.id;
+    console.log(id);
+    firebase.saveItem(id, item)
+};
+
 export const saveExampleData = (firebase) => async dispatch => {
-    getDummyData().map(item => firebase.setData(item))
+    getDoaData().map(item => firebase.setData(item))
 };
 
 export const fetchData = (firebase) => async dispatch => {

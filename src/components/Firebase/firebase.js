@@ -68,6 +68,8 @@ class Firebase {
     // *** Data ***
     setData = (data) => this.db.ref(`data/${this.auth.currentUser.uid}`).push().update(data);
 
+    saveItem = (id, data) => this.db.ref(`data/${this.auth.currentUser.uid}`).child(id).update(data);
+
     data = () => this.db.ref(`data/${this.auth.currentUser.uid}`);
 
     // *** Storage API ***

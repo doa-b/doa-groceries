@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {compose} from 'redux';
+import {connect} from 'react-redux';
+
 import withStyles from '@material-ui/core/styles/withStyles'
 import {AuthUserContext, withAuthorization} from '../../components/Session';
 import {Select} from '@material-ui/core';
@@ -17,10 +19,11 @@ import AddIcon from '@material-ui/icons/Add';
 import ListItemText from '@material-ui/core/ListItemText';
 import {withFirebase} from '../../components/Firebase';
 import * as actions from '../../store/actions';
-import {connect} from 'react-redux';
+
 import {compareValues} from '../../shared/utility';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
+import Item from "../../components/Item/Item";
 
 const styles = theme => ({
     root: {
@@ -30,14 +33,18 @@ const styles = theme => ({
         margin: theme.spacing(1),
     },
     sort: {
-        width: '90%'
+        flexGrow: 1
+    },
+    sortContainer: {
+        display: 'flex',
+        justifyContent: 'space-around'
     }
 });
 /**
  * Created by Doa on 27-1-2020.
  */
 const Home = withStyles(styles)(
-    ({classes, firebase, data, onAddItem, onFetchAllData, onSaveExampleData, history}) => {
+    ({classes, firebase, data, onAddItem, onFetchAllData, onSaveExampleData, onSaveItem, history}) => {
 
         const [isLoading, setLoading] = useState(true);
 
@@ -76,6 +83,11 @@ const Home = withStyles(styles)(
             })
         };
 
+        const setToBuy = (item) => {
+          console.log('clicked to buy');
+            item.mustBuy = !item.mustBuy;
+          onSaveItem(firebase, item);
+        };
 
         return (
             <AuthUserContext.Consumer>
@@ -93,42 +105,38 @@ const Home = withStyles(styles)(
                                         Get example data
                                     </Button>
                                 </p>
-                                <Select value={sort}
-                                        onChange={setOrder}
-                                        className={classes.sort}
-                                        label='Sort by'>
-                                    <MenuItem value='category'>Category</MenuItem>
-                                    <MenuItem value='store'>Store</MenuItem>
-                                    <MenuItem value='day'>Day</MenuItem>
-                                </Select>
-                                <IconButton onClick={() => direction(authUser.preferences.isAscending)}>
-                                    {authUser.preferences.isAscending ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>}
-                                </IconButton>
-                                <List component="nav">
+                                <div className={classes.sortContainer}>
+                                    <Select value={sort}
+                                            onChange={setOrder}
+                                            className={classes.sort}
+                                            label='Sort by'>
+                                        <MenuItem value='category'>Category</MenuItem>
+                                        <MenuItem value='store'>Store</MenuItem>
+                                        <MenuItem value='day'>Day</MenuItem>
+                                    </Select>
+                                    <IconButton onClick={() => direction(authUser.preferences.isAscending)}>
+                                        {authUser.preferences.isAscending ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>}
+                                    </IconButton>
+                                </div>
+                                <List>
                                     {data.sort(compareValues(sort, sortDirection)).map((item, index) => {
                                         let groupHeader = null;
                                         if (item[sort] !== group) {
                                             group = item[sort];
                                             groupHeader = (
-                                                <ListSubheader>
-                                                    {group}
+                                                <ListSubheader style={{color: item.color}}>
+                                                    {group.toUpperCase()}
                                                 </ListSubheader>)
                                         }
                                         return (
                                             <div key={index}>
                                                 {groupHeader}
-                                                <ListItem button dense divider onClick={() => showDetails(item)}>
-                                                    <ListItemIcon>
-                                                        <LabelIcon color="primary"/>
-                                                    </ListItemIcon>
-                                                    {authUser.preferences.showDetails
-                                                        ? <ListItemText primary={item.name}
-                                                                        secondary={item.store + ' - ' + item.day}/>
-                                                        : <ListItemText primary={item.name}/>
-                                                    }
-
-
-                                                </ListItem>
+                                                <Item item={item}
+                                                      detailsClicked={showDetails.bind(this, item)}
+                                                      displayDetails={authUser.preferences.showDetails}
+                                                      clickToBuy={setToBuy.bind(this, item)}
+                                                      isBuying={authUser.preferences.isBuying}
+                                                />
                                             </div>
                                         )
                                     })}
@@ -160,7 +168,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onAddItem: (firebase, item) => dispatch(actions.addItem(firebase, item)),
         onFetchAllData: (firebase) => dispatch(actions.fetchData(firebase)),
-        onSaveExampleData: (firebase) => dispatch(actions.saveExampleData(firebase))
+        onSaveExampleData: (firebase) => dispatch(actions.saveExampleData(firebase)),
+        onSaveItem: (firebase, item) => dispatch(actions.saveItem(firebase, item))
     }
 };
 

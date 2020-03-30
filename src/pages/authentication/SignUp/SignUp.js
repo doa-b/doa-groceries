@@ -19,6 +19,7 @@ const SignUpPage = (props) => {
                     sortBy: 'category',
                     isAscending: false,
                     showDetails: false,
+                    isBuying: false
                 };
                 // Create a user in firebase realtime database
                 return props.firebase
