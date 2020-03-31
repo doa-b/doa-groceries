@@ -11,14 +11,21 @@ import {Icon} from "@material-ui/core";
 const styles = theme => ({
     root: {},
     paper: {
+        heigth: 35,
         display: 'flex',
         flexDirection: 'row',
-        padding: '10, 0, 10, 0',
+        justifyContent: 'center',
+        padding: '2, 0, 2, 0',
         marginBottom: 5,
     },
+    imageContainer: {
+        height: 35,
+        minWidth: 60,
+    },
+
     image: {
-        maxHeight: 50,
-        marginRight: 20
+        maxHeight: 35,
+
     },
     info: {
         display: 'flex',
@@ -27,7 +34,8 @@ const styles = theme => ({
         justifyContent: 'space-around'
     },
     details: {
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        paddingTop: 2.5
     },
     greyOut: {
         opacity: '0.4',
@@ -65,9 +73,11 @@ const Item = withStyles(styles)(
 
         return (
             <PaperCmp className={classes.paper} item={item}>
-                <img className={clsx(classes.image, {[classes.greyOut]: !item.mustBuy})}
-                     src={item.imageUrl}
-                     onClick={clickToBuy}/>
+                <div className={classes.imageContainer}>
+                    <img className={clsx(classes.image, {[classes.greyOut]: !item.mustBuy})}
+                         src={item.imageUrl}
+                         onClick={clickToBuy}/>
+                </div>
                 <div className={classes.info} onClick={clickToBuy} style={{color: item.mustBuy ? (item.textColorIsBlack ? 'black' : 'white') : 'black'}}>
                     <Typography variant='body1'>
                         {(item.amount) ? item.amount + ' ' + item.name : item.name}
@@ -79,7 +89,7 @@ const Item = withStyles(styles)(
                         : null}
                 </div>
                 <div className={classes.details}>
-                    <IconButton onClick={detailsClicked}>
+                    <IconButton onClick={detailsClicked} size="small">
                         <InfoIcon/>
                     </IconButton>
                 </div>

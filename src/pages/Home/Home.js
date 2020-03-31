@@ -119,7 +119,7 @@ const Home = withStyles(styles)(
                                         if (item[sort] !== group) {
                                             group = item[sort];
                                             groupHeader = (
-                                                <ListSubheader style={{color: item.color}}>
+                                                <ListSubheader style={{borderColor: 'black', borderTop: 2}}>
                                                     {group.toUpperCase()}
                                                     <IconButton onClick={addNewItem.bind(this, {[sort]: group})}>
                                                         <AddIcon fontSize="small"/>
