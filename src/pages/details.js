@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {HuePicker} from 'react-color'
 import {compose} from "redux";
 import {connect} from "react-redux";
+import {AuthUserContext} from '../components/Session';
 import withStyles from '@material-ui/core/styles/withStyles'
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,15 +11,23 @@ import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {updateObject} from "../shared/utility";
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from "@material-ui/core/FormControl";
 import MyFreeSoloInput from "../components/ui/MyFreeSoloInput/MyFreeSoloInput";
-import { newDoaData} from "../bootstrap/data";
-
+import { newDoaData, days} from "../bootstrap/data";
+import MenuItem from '@material-ui/core/MenuItem';
 import {withFirebase} from "../components/Firebase";
 import Item from "../components/Item/Item";
+import * as actions from "../store/actions";
+import Button from "@material-ui/core/Button";
+import ImageUpploadWithCallback from "../components/FileUpload/ImageUpploadWithCallback";
+import {Select} from "@material-ui/core";
+
+
 
 const styles = theme => ({
     root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -31,7 +40,7 @@ const styles = theme => ({
         paddingTop: theme.spacing(2)
     },
     colorPicker: {
-        paddingBottom: theme.spacing(3),
+        paddingBottom: theme.spacing(1),
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
@@ -39,6 +48,12 @@ const styles = theme => ({
         justifyContent: 'center',
         flexDirection: 'row',
     },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-around',
+
+    }
+
 });
 
 const findGroups = (arrayList, groupName) => {
@@ -53,9 +68,12 @@ const findGroups = (arrayList, groupName) => {
  * Created by Doa on 29-3-2020.
  */
 const Details = withStyles(styles)(
-    ({classes, location, data}) => {
+    ({classes, location, data, onAddItem, onSaveItem, onDeleteItem,
+         firebase, history}) => {
         const [categories, setCategories] = useState([]);
         const [stores, setStores] = useState([]);
+        const [buttonLabel, setButtonLabel] = useState('Save');
+        const [ischanged,setIsChanged] = useState(false);
         const [item, setItem] = useState(
             {
                 id: '',
@@ -65,48 +83,48 @@ const Details = withStyles(styles)(
                 day: '',
                 amount: '',
                 color: '#123478',
-                textColorIsBlack: true
+                textColorIsBlack: true,
+                imageUrl: ''
             });
 
-        const days = [
-            '',
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-            'sunday',
-        ];
-
         useEffect(() => {
-            if (location && location.state) {
-                setItem(location.state.item);
+            if (location && location.state && location.state.item) {
+                setItem(updateObject(item, location.state.item));
                 setCategories(findGroups(data, 'category'));
                 setStores(findGroups(data, 'store'));
-                console.log(categories)
+                // when adding a new item into existing category, load category data
+                if (location.state.item.category && !location.state.item.name) {
+                    console.log('ONLY THE CATEGORY');
+                    categoryChangedHandler(location.state.item.category)
+                }
+                if (location.state.item.id) setButtonLabel('update');
+                console.log(location.state.item)
             }
         }, [location]);
 
         const inputChangedHandler = (event) => {
-            console.log(event.target);
             setItem(updateObject(item, {[event.target.id]: event.target.value}));
+            setIsChanged(true);
         };
 
-        const dayChangedHandler = (event, value) => {
-            setItem(updateObject(item, {day: value}));
-
+        const dayChangedHandler = (event) => {
+            console.log('EVENT');
+            console.log(event.target);
+            setItem(updateObject(item, {[event.target.name]: event.target.value}));
+            //setIsChanged(true);
+            console.log(item)
         };
 
         const autoCompleteChangedHandler = (id, value) => {
             setItem(updateObject(item, {[id]: value}));
+            setIsChanged(true);
         };
 
-        const categoryChangedHandler = (id, value) => {
-            let newValue = {[id]: value};
+        const categoryChangedHandler = (value) => {
+            let newValue = {category: value};
             let catData = null;
             for (let category in newDoaData) {
-                catData = newDoaData[category]
+                catData = newDoaData[category];
                 if (catData.name === value) {
                     newValue = {
                         category: value,
@@ -117,119 +135,156 @@ const Details = withStyles(styles)(
                     break;
                 }
             }
-            console.log(newValue);
             setItem(updateObject(item, newValue));
+            setIsChanged(true);
         };
 
         const onSubmit = () => {
-            console.log(item)
+            if (item.id) {
+                onSaveItem(firebase, item)
+            } else {
+                delete item.id;
+                onAddItem(firebase, item)
+            }
+            history.goBack()
+        };
+
+        const deleteItem = () => {
+         onDeleteItem(firebase, item);
+            history.goBack()
         };
 
         const colorChangedHandler = (color) => {
             setItem(updateObject(item, {color: color.hex}));
+            setIsChanged(true);
         };
 
         const textColorChangedHandler = () => {
             setItem(updateObject(item, {textColorIsBlack: !item.textColorIsBlack}));
+            setIsChanged(true);
+        };
+
+        const setNewImage = (value) => {
+            console.log('setting new image');
+            setItem(updateObject(item,{imageUrl: value}));
+            firebase.saveItem(item.id,{imageUrl: value})
         };
 
         return (
-            <>
-                <CssBaseline/>
-                <div className={classes.root}>
-                    <div style={{width: '100%'}}>
-                        <Item item={updateObject(item, {mustBuy: true})}
-                              displayDetails={true}
-                              isBuying={false}/>
-                    </div>
-                    <div className={classes.colorPicker}>
-                        <HuePicker
-                            width='100%'
-                            color={item.color}
-                            onChangeComplete={colorChangedHandler}/>
-                        <div className={classes.textColor}>
-                            Text colour: white
-                            <Switch
-                                checked={item.textColorIsBlack}
-                                color='primary'
-                            onChange={textColorChangedHandler}/>
-                                black
-                        </div>
-                    </div>
-                    <Grid container spacing={2}>
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                id="amount"
-                                label="amount"
-                                variant="outlined"
-                                value={item.amount}
-                                onChange={inputChangedHandler}
-                            />
-                        </Grid>
-                        <Grid item xs={9}>
-                            <TextField
-                                fullWidth
-                                id="name"
-                                label="name"
-                                variant="outlined"
-                                value={item.name}
-                                onChange={inputChangedHandler}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item xs={5}>
-                            <Autocomplete
-                                id="day"
-                                options={days.map(day => day)}
-                                value={item.day || ''}
-                                blurOnSelect
-                                onChange={(event, value) => dayChangedHandler(event, value)}
-                                renderInput={(params) => (
-                                    <TextField {...params} label="choose a day" margin="normal" variant="outlined"/>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={7}>
-                            <div>
-                                <MyFreeSoloInput
-                                    style={{paddingTop: 16}}
-                                    label="store name"
-                                    optionsArray={stores}
-                                    value={item.store}
-                                    setValue={autoCompleteChangedHandler.bind(this, 'store')}/>
+                    <>
+                        <CssBaseline/>
+                        <div className={classes.root}>
+                            <div style={{width: '100%'}}>
+                                <Item item={updateObject(item, {mustBuy: true})}
+                                      displayDetails={true}
+                                      isBuying={false}/>
                             </div>
+                            { item.id &&
+                            <ImageUpploadWithCallback
+                                imageUrl={item.imageUrl}
+                                fileName=''
+                                saveUrl=''
+                                urlCallback={setNewImage}
+                            />}
+                            <div className={classes.colorPicker}>
+                                <HuePicker
+                                    width='100%'
+                                    color={item.color}
+                                    onChangeComplete={colorChangedHandler}/>
+                                <div className={classes.textColor}>
+                                    Text colour: white
+                                    <Switch
+                                        checked={item.textColorIsBlack}
+                                        color='primary'
+                                        onChange={textColorChangedHandler}/>
+                                    black
+                                </div>
+                            </div>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        fullWidth
+                                        id="amount"
+                                        label="amount"
+                                        variant="outlined"
+                                        value={item.amount}
+                                        onChange={inputChangedHandler}
+                                    />
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <TextField
+                                        fullWidth
+                                        id="name"
+                                        label="name"
+                                        variant="outlined"
+                                        value={item.name}
+                                        onChange={inputChangedHandler}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2} style={{marginTop: 8}}>
+                                <Grid item xs={6}>
+                                    <FormControl variant="filled" fullWidth>
+                                        <InputLabel id="day-label">Day</InputLabel>
+                                    <Select
+                                        id="day"
+                                        name="day"
+                                        labelId="day-label"
+                                        variant="outlined"
+                                        value={item.day}
+                                        onChange={dayChangedHandler}
+                                    >
+                                        {days.map(day => (
+                                            <MenuItem key={day} value={day}>{day}</MenuItem>
+                                            ))}
 
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <MyFreeSoloInput
-                                style={{paddingTop: 16}}
-                                label="Category"
-                                optionsArray={categories}
-                                value={item.category}
-                                setValue={categoryChangedHandler.bind(this, 'category')}/>
-                        </Grid>
-                    </Grid>
-                </div>
-                <Container component='main' maxWidth='sm'>
-                    <div className={classes.values}>
-                        {Object.entries(item).map(([key, value]) => (
-                                <TextField
-                                    key={key}
-                                    id={key}
-                                    label={key}
-                                    value={value}
-                                    onChange={inputChangedHandler}
-                                    variant='outlined'/>
-                            )
-                        )}
+                                    </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div>
+                                        <MyFreeSoloInput
+                                            label="store name"
+                                            optionsArray={stores}
+                                            value={item.store}
+                                            setValue={autoCompleteChangedHandler.bind(this, 'store')}/>
+                                    </div>
 
-                    </div>
-                </Container>
-            </>);
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <MyFreeSoloInput
+                                        style={{paddingTop: 16}}
+                                        label="Category"
+                                        optionsArray={categories}
+                                        value={item.category}
+                                        setValue={categoryChangedHandler}/>
+                                </Grid>
+                            </Grid>
+                        </div>
+                        <div className={classes.buttonContainer}>
+                            <Button
+                                disabled={!ischanged}
+                                className={classes.button}
+                                variant="contained"
+                                color="primary"
+                                onClick={onSubmit}
+                            >
+                                {buttonLabel}
+                            </Button>
+                            {(buttonLabel === "update") &&
+                            <Button
+                                className={classes.button}
+                                variant="contained"
+                                color="secondary"
+                                onClick={deleteItem}
+                            >
+                                Delete
+                            </Button>}
+                        </div>
+                    </>
+           );
     });
 
 const mapStateToProps = (state) => {
@@ -238,7 +293,15 @@ const mapStateToProps = (state) => {
     }
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAddItem: (firebase, item) => dispatch(actions.addItem(firebase, item)),
+        onSaveItem: (firebase, item) => dispatch(actions.saveItem(firebase, item)),
+        onDeleteItem: (firebase, item) => dispatch(actions.deleteItem(firebase, item))
+    }
+};
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     withFirebase)
 (Details);

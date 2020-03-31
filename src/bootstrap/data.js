@@ -19,6 +19,15 @@ const doaData = {
         'wc blokken', 'toiletpapier', 'keukenrol', 'diepvrieszakken', 'Bio-tex handwas', 'elastiekjes', 'batterijen'],
 };
 
+export const days = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+];
 export const newDoaData = {
     category1: {
         name: 'Zuivel',

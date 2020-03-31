@@ -33,7 +33,7 @@ const styles = theme => ({
 
 let defaultImage = '';
 
-class ImageUppload extends Component {
+class GenericImageUpload extends Component {
 
     constructor(props) {
         super(props);
@@ -83,7 +83,7 @@ class ImageUppload extends Component {
         // set listener for result
         this.uppload.on('upload', url => {
             this.setState({url});
-          // we could also save the URL to our database here
+            // we could also save the URL to our database here
             //  this.props.firebase.user(this.props.userId).update({imageUrl: url})
         });
         // open uploader
@@ -112,4 +112,4 @@ class ImageUppload extends Component {
 export default compose (
     withFirebase,
     withStyles(styles)
-)(ImageUppload)
+)(GenericImageUpload)

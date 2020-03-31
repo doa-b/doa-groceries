@@ -70,6 +70,8 @@ class Firebase {
 
     saveItem = (id, data) => this.db.ref(`data/${this.auth.currentUser.uid}`).child(id).update(data);
 
+    deleteItem = (id) => this.db.ref(`data/${this.auth.currentUser.uid}`).child(id).remove();
+
     data = () => this.db.ref(`data/${this.auth.currentUser.uid}`);
 
     // *** Storage API ***
@@ -79,7 +81,6 @@ class Firebase {
     images = () => this.storage.ref(`images`);
 
     // *** Uppload uploader *** //
-
     firebaseUploader = (file, updateProgress, fileName, saveUrl) =>
         new Promise((resolve, reject) => {
             console.log(file);
@@ -117,8 +118,9 @@ class Firebase {
                     uploadTask.snapshot.ref
                         .getDownloadURL()
                         .then(url => {
+                            // saving the URL of your upload to database (saveUrl) location
                             // when you use update(value) value MUST be an object
-                            this.db.ref(saveUrl).set(url);
+                            if (saveUrl) this.db.ref(saveUrl).set(url);
                             //  this.db.ref(`users/3igMGPcFl1X7h5WbFgAYRxXGjJ63/imageUrl`).set(url);
                             resolve(url)
                         }) // Return uploaded file's URL

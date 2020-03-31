@@ -49,9 +49,9 @@ class ImageUppload extends Component {
     componentDidMount() {
         this.uppload = new Uppload({
             maxSize: [150, 150],
-            compression: 0.8, // between 1 (highest quality to 0 highest compression
+            compression: 0.6, // between 1 (highest quality to 0 highest compression
             lang: en,
-            defaultService: 'local',
+            defaultService: 'pixabay',
             uploader: (file, updateProgress) =>
                 this.props.firebase.firebaseUploader(file, updateProgress, this.props.fileName, this.props.saveUrl)
         });
@@ -62,19 +62,17 @@ class ImageUppload extends Component {
             // services order matters
             new Local(),
             new Camera(),
-            new Instagram(),
-            new Facebook(),
-            new Twitter(),
-            new LinkedIn(),
+            // new Instagram(),
+            // new Facebook(),
+            // new Twitter(),
+            // new LinkedIn(),
             new Pixabay(pixabayKey),
             // effects order matters
-            new Crop({
-                aspectRatio: 1,
-            }),
-            new Blur(),
-            new Invert(),
-            new Saturate(),
-            new Sepia(),
+            new Crop(),
+            // new Blur(),
+            // new Invert(),
+            // new Saturate(),
+            // new Sepia(),
         ]);
     }
 
@@ -85,11 +83,13 @@ class ImageUppload extends Component {
             this.setState({url});
           // we could also save the URL to our database here
             //  this.props.firebase.user(this.props.userId).update({imageUrl: url})
+            // send the URL back in your callback
+           this.props.urlCallback(url)
         });
         // open uploader
         this.uppload.open();
         // auto navigate to service
-        this.uppload.navigate('local');
+        this.uppload.navigate('pixabay');
     }
 
     render() {

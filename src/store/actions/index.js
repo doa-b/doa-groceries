@@ -1,1 +1,1 @@
-export { addItem, fetchData, saveExampleData, saveItem } from './data'
+export { addItem, fetchData, saveExampleData, saveItem, deleteItem } from './data'

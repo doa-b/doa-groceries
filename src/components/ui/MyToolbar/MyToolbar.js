@@ -1,8 +1,10 @@
 import React from 'react';
+import {NavLink} from "react-router-dom";
 import {connect} from 'react-redux';
-import { compose } from "redux";
+import {compose} from "redux";
 import {AuthUserContext} from '../../Session'
 import {withFirebase} from "../../Firebase";
+import * as ROUTES from '../../../shared/routes'
 
 import {Tooltip, withStyles} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar/AppBar';
@@ -15,13 +17,16 @@ import Badge from "@material-ui/core/Badge";
 
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
 import ListAltIcon from '@material-ui/icons/ListAltOutlined';
-
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import NavigationBackButton from "./NavigationBackButton";
 
 
 const styles = theme => ({
     menuButton: {
         marginLeft: -12,
-        marginRight: 20
+    },
+    backButton: {
+        marginLeft: -12,
     },
     toolBar: {
         alignItems: 'center'
@@ -59,6 +64,7 @@ const MyToolbar = withStyles(styles)(
                         >
                             <MenuIcon/>
                         </IconButton>
+                       <NavigationBackButton/>
                         <Typography
                             variant='h5'
                             color='inherit'
@@ -72,12 +78,12 @@ const MyToolbar = withStyles(styles)(
                             {authUser => authUser ? (
                                 <>
                                     <IconButton color="inherit"
-                                                onClick={()=> firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}>
+                                                onClick={() => firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}>
                                         <Badge badgeContent={itemCounter} color="secondary"
                                                anchorOrigin={{horizontal: "right", vertical: "top"}}>
                                             {authUser.preferences.isBuying
-                                                ? <ListAltIcon fontSize="large" />
-                                                : <ShoppingCartIcon fontSize="large"/>}
+                                                ? <ListAltIcon/>
+                                                : <ShoppingCartIcon/>}
                                         </Badge>
 
                                     </IconButton>

@@ -27,7 +27,7 @@ import Item from "../../components/Item/Item";
 
 const styles = theme => ({
     root: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(1)
     },
     button: {
         margin: theme.spacing(1),
@@ -66,14 +66,12 @@ const Home = withStyles(styles)(
             firebase.setPreferences({isAscending: !isAscending})
         };
 
-        const addNewItem = (number) => {
-            const item = {
-                name: 'item ' + number,
-                category: 'category ' + number,
-                store: 'store' + number,
-                day: number
-            };
-            onAddItem(firebase, item);
+        const addNewItem = (parameter) => {
+            console.log(parameter);
+            history.push({
+                pathname: '/details',
+                state: {item: parameter}
+            });
         };
 
         const showDetails = (item) => {
@@ -96,15 +94,12 @@ const Home = withStyles(styles)(
                     let sortDirection = (authUser.preferences.isAscending) ? 'asc' : 'desc';
                     const sort = authUser.preferences.sortBy;
                     return (
-                        <Container component='main' maxWidth='sm'>
+                        <>
                             <CssBaseline/>
                             <div className={classes.root}>
-                                <h1>Home Page of {authUser.firstName}</h1>
-                                <p>The Home Page is accessible by every signed in user.
                                     <Button onClick={() => onSaveExampleData(firebase)}>
                                         Get example data
                                     </Button>
-                                </p>
                                 <div className={classes.sortContainer}>
                                     <Select value={sort}
                                             onChange={setOrder}
@@ -126,6 +121,9 @@ const Home = withStyles(styles)(
                                             groupHeader = (
                                                 <ListSubheader style={{color: item.color}}>
                                                     {group.toUpperCase()}
+                                                    <IconButton onClick={addNewItem.bind(this, {[sort]: group})}>
+                                                        <AddIcon fontSize="small"/>
+                                                    </IconButton>
                                                 </ListSubheader>)
                                         }
                                         return (
@@ -145,13 +143,13 @@ const Home = withStyles(styles)(
                                     className={classes.button}
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => (addNewItem(data.length + 1))}
+                                    onClick={addNewItem.bind(this, {category: 'new Category' + (data.length + 1)})}
                                     startIcon={<AddIcon/>}
                                 >
                                     Add new Item
                                 </Button>
                             </div>
-                        </Container>
+                        </>
                     )
                 }}
             </AuthUserContext.Consumer>

@@ -11,8 +11,11 @@ export const addItem = (firebase, item) => async dispatch => {
 export const saveItem = (firebase, item) => async dispatch => {
     const id = item.id;
     delete item.id;
-    console.log(id);
     firebase.saveItem(id, item)
+};
+
+export const deleteItem = (firebase, item) => async dispatch => {
+    firebase.deleteItem(item.id)
 };
 
 export const saveExampleData = (firebase) => async dispatch => {
