@@ -2,14 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {HuePicker} from 'react-color'
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {AuthUserContext} from '../../components/Session';
 import withStyles from '@material-ui/core/styles/withStyles'
-import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import {updateObject} from "../../shared/utility";
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from "@material-ui/core/FormControl";
@@ -59,7 +56,7 @@ const styles = theme => ({
 const findGroups = (arrayList, groupName) => {
     const groups = [];
     arrayList.map((item) => {
-        if (groups.includes(item[groupName])) return
+        if (groups.includes(item[groupName])) return;
         groups.push(item[groupName])
     });
     return groups
@@ -94,11 +91,9 @@ const Details = withStyles(styles)(
                 setStores(findGroups(data, 'store'));
                 // when adding a new item into existing category, load category data
                 if (location.state.item.category && !location.state.item.name) {
-                    console.log('ONLY THE CATEGORY');
                     categoryChangedHandler(location.state.item.category)
                 }
                 if (location.state.item.id) setButtonLabel('update');
-                console.log(location.state.item)
             }
         }, [location]);
 
@@ -108,11 +103,8 @@ const Details = withStyles(styles)(
         };
 
         const dayChangedHandler = (event) => {
-            console.log('EVENT');
-            console.log(event.target);
             setItem(updateObject(item, {[event.target.name]: event.target.value}));
-            //setIsChanged(true);
-            console.log(item)
+            setIsChanged(true);
         };
 
         const autoCompleteChangedHandler = (id, value) => {
@@ -165,7 +157,6 @@ const Details = withStyles(styles)(
         };
 
         const setNewImage = (value) => {
-            console.log('setting new image');
             setItem(updateObject(item,{imageUrl: value}));
             firebase.saveItem(item.id,{imageUrl: value})
         };

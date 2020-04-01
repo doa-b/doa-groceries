@@ -14,7 +14,6 @@ const MyFreeSoloInput = ({label, optionsArray, value, setValue, style}) => {
         <Autocomplete
             value={value}
             onChange={(event, newValue) => {
-                console.log(value);
                 if (newValue && newValue.inputValue) {
                     setValue(newValue.inputValue);
                     return;

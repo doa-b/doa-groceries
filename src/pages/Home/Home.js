@@ -64,7 +64,6 @@ const Home = withStyles(styles)(
         useEffect(() => () => firebase.data().off(), []);
 
         const addNewItem = (parameter) => {
-            console.log(parameter);
             history.push({
                 pathname: '/details',
                 state: {item: parameter}
@@ -79,7 +78,6 @@ const Home = withStyles(styles)(
         };
 
         const setToBuy = (item) => {
-            console.log('clicked to buy');
             item.mustBuy = !item.mustBuy;
             onSaveItem(firebase, item);
         };
@@ -93,7 +91,6 @@ const Home = withStyles(styles)(
         return (
             <AuthUserContext.Consumer>
                 {authUser => {
-                    console.log('rerender list');
                     let group = '';
                     let sortDirection = (authUser.preferences.isAscending) ? 'asc' : 'desc';
                     const sort = authUser.preferences.sortBy;

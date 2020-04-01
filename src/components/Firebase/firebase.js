@@ -83,8 +83,6 @@ class Firebase {
     // *** Uppload uploader *** //
     firebaseUploader = (file, updateProgress, fileName, saveUrl) =>
         new Promise((resolve, reject) => {
-            console.log(file);
-
             if (!fileName) {
                 // Generate a file name based on current date and random number
                 fileName = `${

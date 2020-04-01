@@ -4,7 +4,6 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import {IconButton, Select} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";

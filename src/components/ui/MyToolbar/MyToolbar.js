@@ -1,12 +1,10 @@
 import React from 'react';
-import {NavLink} from "react-router-dom";
 import {connect} from 'react-redux';
 import {compose} from "redux";
 import {AuthUserContext} from '../../Session'
 import {withFirebase} from "../../Firebase";
-import * as ROUTES from '../../../shared/routes'
 
-import {Tooltip, withStyles} from '@material-ui/core';
+import {withStyles} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';

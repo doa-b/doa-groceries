@@ -36,7 +36,7 @@ export const newDoaData = {
     },
     category2: {
         name: 'Vlees',
-        items: ['gehakt, kipfillet', 'kippedij', 'hamblokjes', 'spekblokjes', 'draadjesvlees',
+        items: ['gehakt', 'kipfillet', 'kippedij', 'hamblokjes', 'spekblokjes', 'draadjesvlees',
             'blinde vink', 'schnitzel', 'varkenshaas', 'katenspek', 'worst', 'hamburger', 'spareribs'],
         color: '#782119',
         textColorIsBlack: false,
@@ -136,7 +136,6 @@ export const newDoaData = {
 export const getDoaData = () => {
     const allData = [];
     for (let category in newDoaData) {
-        console.log (newDoaData[category]);
         const categoryData = newDoaData[category];
        categoryData.items.map((item) => {
             const itemData = {

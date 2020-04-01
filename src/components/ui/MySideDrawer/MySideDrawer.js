@@ -65,7 +65,6 @@ const styles = theme => ({
 const MySideDrawer = withStyles(styles)(
     ({
          classes, variant, open, onClose, onItemClick, firebase
-
      }) => {
         const SideDrawerNonAuth = () => (
             <List>

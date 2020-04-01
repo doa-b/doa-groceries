@@ -89,6 +89,7 @@ class ImageUpploadWithCallback extends Component {
         return (
             <div className={classes.root}>
                 <Avatar
+                    onClick={this.open.bind(this)}
                     variant='square'
                     className={classes.image}
                     alt='profile picture'

@@ -5,8 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import {Icon} from "@material-ui/core";
-
 
 const styles = theme => ({
     root: {},
@@ -50,7 +48,6 @@ const styles = theme => ({
 
 const PaperCmp = (props) => {
     if (props.item.mustBuy) {
-        console.log(props);
         return (
             <Paper {...props} elevation={10} style={{backgroundColor: props.item.color}}>
                 {props.children}
@@ -77,6 +74,7 @@ const Item = withStyles(styles)(
             <PaperCmp className={classes.paper} item={item}>
                 <div className={classes.imageContainer}>
                     <img className={clsx(classes.image, {[classes.greyOut]: !item.mustBuy})}
+                         alt={item.category}
                          src={item.imageUrl}
                          onClick={clickToBuy}/>
                 </div>
