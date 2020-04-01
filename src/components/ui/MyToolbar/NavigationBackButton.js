@@ -15,7 +15,7 @@ const styles = theme => ({
 const NavigationBackButton = withStyles(styles)(
     ({classes, history}) => {
         const path = history.location.pathname;
-        if (path === '/home' || path === '/landing') return null;
+        if (path === '/home' || path === '/') return null;
         return (
             <IconButton
                 className={classes.backButton}

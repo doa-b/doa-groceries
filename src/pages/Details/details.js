@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {HuePicker} from 'react-color'
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {AuthUserContext} from '../components/Session';
+import {AuthUserContext} from '../../components/Session';
 import withStyles from '@material-ui/core/styles/withStyles'
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,17 +10,17 @@ import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {updateObject} from "../shared/utility";
+import {updateObject} from "../../shared/utility";
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from "@material-ui/core/FormControl";
-import MyFreeSoloInput from "../components/ui/MyFreeSoloInput/MyFreeSoloInput";
-import { newDoaData, days} from "../bootstrap/data";
+import MyFreeSoloInput from "../../components/ui/MyFreeSoloInput/MyFreeSoloInput";
+import { newDoaData, days} from "../../bootstrap/data";
 import MenuItem from '@material-ui/core/MenuItem';
-import {withFirebase} from "../components/Firebase";
-import Item from "../components/Item/Item";
-import * as actions from "../store/actions";
+import {withFirebase} from "../../components/Firebase";
+import Item from "../../components/Item/Item";
+import * as actions from "../../store/actions";
 import Button from "@material-ui/core/Button";
-import ImageUpploadWithCallback from "../components/FileUpload/ImageUpploadWithCallback";
+import ImageUpploadWithCallback from "../../components/FileUpload/ImageUpploadWithCallback";
 import {Select} from "@material-ui/core";
 
 

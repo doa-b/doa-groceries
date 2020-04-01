@@ -8,6 +8,7 @@ import {Select} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import {IconButton} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Typography from "@material-ui/core/Typography";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import List from '@material-ui/core/List';
@@ -24,20 +25,30 @@ import {compareValues} from '../../shared/utility';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Item from "../../components/Item/Item";
+import SortControls from "../../components/ui/SortControls/SortControls";
 
 const styles = theme => ({
     root: {
-        padding: theme.spacing(1)
+        padding: theme.spacing(1),
+        marginTop: -18,
+        maxWidth: 600
     },
     button: {
         margin: theme.spacing(1),
     },
-    sort: {
-        flexGrow: 1
-    },
-    sortContainer: {
+    group: {
+        color: 'grey',
+        fontSize: 14,
         display: 'flex',
-        justifyContent: 'space-around'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: 5,
+        paddingRight: 1,
+        marginTop: 15,
+        marginBotton: 10,
+        borderTop: '1px solid #ddd',
+        borderLeft: '1px solid #ddd',
+        borderRight: '1px solid #ddd',
     }
 });
 /**
@@ -47,6 +58,8 @@ const Home = withStyles(styles)(
     ({classes, firebase, data, onAddItem, onFetchAllData, onSaveExampleData, onSaveItem, history}) => {
 
         const [isLoading, setLoading] = useState(true);
+        console.log(data.length)
+        const hasData = data.length > 2;
 
         useEffect(() => {
             if (isLoading) {
@@ -57,14 +70,6 @@ const Home = withStyles(styles)(
 
         // cleanup
         useEffect(() => () => firebase.data().off(), []);
-
-        const setOrder = (event) => {
-            firebase.setPreferences({sortBy: event.target.value})
-        };
-
-        const direction = (isAscending) => {
-            firebase.setPreferences({isAscending: !isAscending})
-        };
 
         const addNewItem = (parameter) => {
             console.log(parameter);
@@ -97,34 +102,24 @@ const Home = withStyles(styles)(
                         <>
                             <CssBaseline/>
                             <div className={classes.root}>
+                                { !hasData &&
                                     <Button onClick={() => onSaveExampleData(firebase)}>
                                         Get example data
-                                    </Button>
-                                <div className={classes.sortContainer}>
-                                    <Select value={sort}
-                                            onChange={setOrder}
-                                            className={classes.sort}
-                                            label='Sort by'>
-                                        <MenuItem value='category'>Category</MenuItem>
-                                        <MenuItem value='store'>Store</MenuItem>
-                                        <MenuItem value='day'>Day</MenuItem>
-                                    </Select>
-                                    <IconButton onClick={() => direction(authUser.preferences.isAscending)}>
-                                        {authUser.preferences.isAscending ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>}
-                                    </IconButton>
-                                </div>
+                                    </Button>}
                                 <List>
                                     {data.sort(compareValues(sort, sortDirection)).map((item, index) => {
                                         let groupHeader = null;
                                         if (item[sort] !== group) {
                                             group = item[sort];
                                             groupHeader = (
-                                                <ListSubheader style={{borderColor: 'black', borderTop: 2}}>
+                                                <div className={classes.group}>
+                                                    <Typography variant="h6">
                                                     {group.toUpperCase()}
-                                                    <IconButton onClick={addNewItem.bind(this, {[sort]: group})}>
+                                                    </Typography>
+                                                    <IconButton onClick={addNewItem.bind(this, {[sort]: group})} size="small">
                                                         <AddIcon fontSize="small"/>
                                                     </IconButton>
-                                                </ListSubheader>)
+                                                </div>)
                                         }
                                         return (
                                             <div key={index}>

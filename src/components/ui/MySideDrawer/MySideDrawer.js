@@ -3,7 +3,7 @@ import {Route, NavLink, Switch} from 'react-router-dom';
 import clsx from 'clsx';
 import * as ROUTES from '../../../shared/routes';
 import * as ACCESSLEVEL from '../../../shared/accessLevel';
-import { AuthUserContext } from '../../Session'
+import {AuthUserContext} from '../../Session'
 
 import {Checkbox, withStyles} from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
@@ -22,6 +22,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import {withFirebase} from '../../Firebase';
+import SortControls from "../SortControls/SortControls";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const styles = theme => ({
     root: {
@@ -46,12 +48,17 @@ const styles = theme => ({
     },
     avatar: {
         margin: 10,
-        width: 150,
-        height: 150
+        width: 30,
+        height: 30
     },
     nonAuth: {
         textAlign: 'center',
         maxWidth: 150
+    },
+    user: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 });
 
@@ -62,8 +69,8 @@ const MySideDrawer = withStyles(styles)(
      }) => {
         const SideDrawerNonAuth = () => (
             <List>
-                <Typography className={classes.nonAuth} variant='subtitle1' >
-                   This App needs authentication
+                <Typography className={classes.nonAuth} variant='subtitle1'>
+                    This App needs authentication
                 </Typography>
                 <NavItem
                     to={ROUTES.SIGN_IN}
@@ -80,74 +87,78 @@ const MySideDrawer = withStyles(styles)(
             </List>
         );
 
-        const SideDrawerAuth = ({ authUser }) => (
-            <List>
-                <ListItem alignItems='center'>
-                    <Avatar variant='square'
-                        className={classes.avatar}
-                        alt='logged in user'
-                        src={authUser.imageUrl}/>
-                </ListItem>
-                <ListSubheader>
-                    {authUser.firstName + ' ' + authUser.lastName}
-                </ListSubheader>
-                <NavItem
-                    to={ROUTES.ACCOUNT}
-                    text='Account'
-                    Icon={TuneIcon}
-                    onClick={onItemClick()}
-                />
-                <NavItem
-                    to={ROUTES.SIGN_OUT}
-                    text='Logout'
-                    Icon={ExitToAppIcon}
-                    onClick={onItemClick()}
-                />
-                <ListSubheader>
-                    Settings
-                </ListSubheader>
-                <ListItem>
-                    <Checkbox
-                        value={authUser.preferences.showDetails}
-                        onChange={()=> firebase.setPreferences({showDetails: !authUser.preferences.showDetails})}
-                        checked={authUser.preferences.showDetails}/>
-                    <ListItemText>
-                       Show Details
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <Checkbox
-                        value={authUser.preferences.isBuying}
-                        onChange={()=> firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}
-                        checked={authUser.preferences.isBuying}/>
-                    <ListItemText>
-                        Show cart
-                    </ListItemText>
-                </ListItem>
-                <ListSubheader>
-                    Navigation
-                </ListSubheader>
-                <NavItem
-                    to={ROUTES.LANDING}
-                    text='Landing'
-                    Icon={HomeIcon}
-                    onClick={onItemClick()}
-                />
-                <NavItem
-                    to={ROUTES.HOME}
-                    text='Home'
-                    Icon={HomeIcon}
-                    onClick={onItemClick()}
-                />
-                {(authUser.accessLevel >= ACCESSLEVEL.ADMINISTRATOR) && (
-                <NavItem
-                    to={ROUTES.ADMIN}
-                    text='ADMIN'
-                    Icon={SupervisorAccountIcon}
-                    onClick={onItemClick()}
-                />
-                )}
-            </List>);
+        const SideDrawerAuth = ({authUser}) => {
+            return (
+                <List>
+                    <ListSubheader className={classes.user}>
+                        {authUser.firstName + ' ' + authUser.lastName}
+                        <Avatar className={classes.avatar}
+                                alt='logged in user'
+                                src={authUser.imageUrl}/>
+                    </ListSubheader>
+                    <NavItem
+                        to={ROUTES.ACCOUNT}
+                        text='Account'
+                        Icon={TuneIcon}
+                        onClick={onItemClick()}
+                    />
+                    <NavItem
+                        to={ROUTES.SIGN_OUT}
+                        text='Logout'
+                        Icon={ExitToAppIcon}
+                        onClick={onItemClick()}
+                    />
+                    <ListSubheader>
+                        Settings
+                    </ListSubheader>
+                    <ListItem>
+                        <ListItemText>Show Details</ListItemText>
+                        <ListItemSecondaryAction>
+                            <Checkbox
+                                value={authUser.preferences.showDetails}
+                                onChange={() => firebase.setPreferences(
+                                    {showDetails: !authUser.preferences.showDetails})}
+                                checked={authUser.preferences.showDetails}/>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemText>Show cart</ListItemText>
+                        <ListItemSecondaryAction>
+                            <Checkbox
+                                value={authUser.preferences.isBuying}
+                                onChange={() => firebase.setPreferences(
+                                    {isBuying: !authUser.preferences.isBuying})}
+                                checked={authUser.preferences.isBuying}/>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem>
+                        <SortControls authUser={authUser}/>
+                    </ListItem>
+                    <ListSubheader>
+                        Navigation
+                    </ListSubheader>
+                    <NavItem
+                        to={ROUTES.LANDING}
+                        text='Landing'
+                        Icon={HomeIcon}
+                        onClick={onItemClick()}
+                    />
+                    <NavItem
+                        to={ROUTES.HOME}
+                        text='Home'
+                        Icon={HomeIcon}
+                        onClick={onItemClick()}
+                    />
+                    {(authUser.accessLevel >= ACCESSLEVEL.ADMINISTRATOR) && (
+                        <NavItem
+                            to={ROUTES.ADMIN}
+                            text='ADMIN'
+                            Icon={SupervisorAccountIcon}
+                            onClick={onItemClick()}
+                        />
+                    )}
+                </List>)
+        };
 
         return (
             <Drawer variant={variant} open={open} onClose={onClose}>
@@ -158,7 +169,7 @@ const MySideDrawer = withStyles(styles)(
                     })}
                 />
                 <AuthUserContext.Consumer>
-                {authUser => authUser ? <SideDrawerAuth authUser={authUser}/> : <SideDrawerNonAuth/>}
+                    {authUser => authUser ? <SideDrawerAuth authUser={authUser}/> : <SideDrawerNonAuth/>}
                 </AuthUserContext.Consumer>
             </Drawer>
         )

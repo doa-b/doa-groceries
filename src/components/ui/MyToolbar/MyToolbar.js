@@ -17,7 +17,6 @@ import Badge from "@material-ui/core/Badge";
 
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
 import ListAltIcon from '@material-ui/icons/ListAltOutlined';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import NavigationBackButton from "./NavigationBackButton";
 
 
@@ -33,6 +32,9 @@ const styles = theme => ({
     },
     corner: {
         marginLeft: 'auto'
+    },
+    displayIcon: {
+        marginRight: 10
     },
     toolbarMargin: theme.mixins.toolbar,
     aboveDrawer: {
@@ -77,7 +79,7 @@ const MyToolbar = withStyles(styles)(
                         <AuthUserContext.Consumer>
                             {authUser => authUser ? (
                                 <>
-                                    <IconButton color="inherit"
+                                    <IconButton color="inherit" className={classes.displayIcon}
                                                 onClick={() => firebase.setPreferences({isBuying: !authUser.preferences.isBuying})}>
                                         <Badge badgeContent={itemCounter} color="secondary"
                                                anchorOrigin={{horizontal: "right", vertical: "top"}}>

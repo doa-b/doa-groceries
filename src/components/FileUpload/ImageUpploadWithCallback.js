@@ -20,7 +20,7 @@ const styles = theme => ({
         }
     },
     root: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -33,7 +33,7 @@ const styles = theme => ({
 
 let defaultImage = '';
 
-class ImageUppload extends Component {
+class ImageUpploadWithCallback extends Component {
 
     constructor(props) {
         super(props);
@@ -89,7 +89,7 @@ class ImageUppload extends Component {
         // open uploader
         this.uppload.open();
         // auto navigate to service
-        this.uppload.navigate('pixabay');
+        this.uppload.navigate('local');
     }
 
     render() {
@@ -112,4 +112,4 @@ class ImageUppload extends Component {
 export default compose (
     withFirebase,
     withStyles(styles)
-)(ImageUppload)
+)(ImageUpploadWithCallback)

@@ -24,7 +24,9 @@ const styles = theme => ({
     },
 
     image: {
-        maxHeight: 35,
+        height: 35,
+        width: 50,
+        objectFit: 'cover',
 
     },
     info: {
