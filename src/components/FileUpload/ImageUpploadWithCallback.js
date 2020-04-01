@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
-    Uppload, Camera, en, Local, Crop, Blur, Invert, Saturate, Sepia,
-    Instagram, Facebook, Twitter, LinkedIn, Pixabay
+    Uppload, Camera, en, Local, Crop,Pixabay
 } from 'uppload';
 import 'uppload/dist/uppload.css'
 import 'uppload/dist/themes/light.css';
@@ -51,7 +50,7 @@ class ImageUpploadWithCallback extends Component {
             maxSize: [150, 150],
             compression: 0.6, // between 1 (highest quality to 0 highest compression
             lang: en,
-            defaultService: 'pixabay',
+            defaultService: 'local',
             uploader: (file, updateProgress) =>
                 this.props.firebase.firebaseUploader(file, updateProgress, this.props.fileName, this.props.saveUrl)
         });
@@ -62,17 +61,9 @@ class ImageUpploadWithCallback extends Component {
             // services order matters
             new Local(),
             new Camera(),
-            // new Instagram(),
-            // new Facebook(),
-            // new Twitter(),
-            // new LinkedIn(),
             new Pixabay(pixabayKey),
             // effects order matters
             new Crop(),
-            // new Blur(),
-            // new Invert(),
-            // new Saturate(),
-            // new Sepia(),
         ]);
     }
 

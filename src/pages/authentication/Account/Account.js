@@ -14,8 +14,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import Uppload from '../../../components/FileUpload/ImageUppload';
+import ImageUppload from '../../../components/FileUpload/ImageUppload';
 import {updateObject} from '../../../shared/utility';
+
 
 const styles = theme => ({
     '@global': {
@@ -60,7 +61,7 @@ const AccountPage = ({classes, ...props}) => (
             delete userData.uid;
             return (
                 <>
-                    <Uppload
+                    <ImageUppload
                         imageUrl={authUser.imageUrl}
                         saveUrl={`users/${authUser.uid}/imageUrl`}
                         fileName = {`${authUser.uid}_avatar`}

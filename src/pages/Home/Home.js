@@ -2,36 +2,30 @@ import React, {useState, useEffect} from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 
+import {withFirebase} from '../../components/Firebase';
+import * as actions from '../../store/actions';
+import {compareValues} from '../../shared/utility';
+
 import withStyles from '@material-ui/core/styles/withStyles'
 import {AuthUserContext, withAuthorization} from '../../components/Session';
-import {Select} from '@material-ui/core';
-import MenuItem from '@material-ui/core/MenuItem';
 import {IconButton} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import LabelIcon from '@material-ui/icons/Label';
 import AddIcon from '@material-ui/icons/Add';
-import ListItemText from '@material-ui/core/ListItemText';
-import {withFirebase} from '../../components/Firebase';
-import * as actions from '../../store/actions';
-
-import {compareValues} from '../../shared/utility';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
+
 import Item from "../../components/Item/Item";
-import SortControls from "../../components/ui/SortControls/SortControls";
 
 const styles = theme => ({
     root: {
         padding: theme.spacing(1),
         marginTop: -18,
         maxWidth: 600
+    },
+
+    startButton: {
+       margin: '20px 5px 10px 0px'
     },
     button: {
         margin: theme.spacing(1),
@@ -55,10 +49,8 @@ const styles = theme => ({
  * Created by Doa on 27-1-2020.
  */
 const Home = withStyles(styles)(
-    ({classes, firebase, data, onAddItem, onFetchAllData, onSaveExampleData, onSaveItem, history}) => {
-
+    ({classes, firebase, data, onFetchAllData, onSaveExampleData, onSaveItem, history}) => {
         const [isLoading, setLoading] = useState(true);
-        console.log(data.length)
         const hasData = data.length > 2;
 
         useEffect(() => {
@@ -87,14 +79,21 @@ const Home = withStyles(styles)(
         };
 
         const setToBuy = (item) => {
-          console.log('clicked to buy');
+            console.log('clicked to buy');
             item.mustBuy = !item.mustBuy;
-          onSaveItem(firebase, item);
+            onSaveItem(firebase, item);
+        };
+
+        const shouldDisplayGroupTitle = (group, sort, isBuying) => {
+            const itemsInGroup = data.filter(item => item[sort] === group && item.mustBuy);
+            if (isBuying && itemsInGroup.length === 0) return false;
+            return true;
         };
 
         return (
             <AuthUserContext.Consumer>
                 {authUser => {
+                    console.log('rerender list');
                     let group = '';
                     let sortDirection = (authUser.preferences.isAscending) ? 'asc' : 'desc';
                     const sort = authUser.preferences.sortBy;
@@ -102,24 +101,31 @@ const Home = withStyles(styles)(
                         <>
                             <CssBaseline/>
                             <div className={classes.root}>
-                                { !hasData &&
+                                {!hasData &&
+                                <div className={classes.startButton}>
                                     <Button onClick={() => onSaveExampleData(firebase)}>
                                         Get example data
-                                    </Button>}
+                                    </Button>
+                                </div>
+                                }
                                 <List>
                                     {data.sort(compareValues(sort, sortDirection)).map((item, index) => {
                                         let groupHeader = null;
                                         if (item[sort] !== group) {
                                             group = item[sort];
-                                            groupHeader = (
-                                                <div className={classes.group}>
-                                                    <Typography variant="h6">
-                                                    {group.toUpperCase()}
-                                                    </Typography>
-                                                    <IconButton onClick={addNewItem.bind(this, {[sort]: group})} size="small">
-                                                        <AddIcon fontSize="small"/>
-                                                    </IconButton>
-                                                </div>)
+                                            // check if any items in this group need to be bought
+                                            if (shouldDisplayGroupTitle(group, sort, authUser.preferences.isBuying)) {
+                                                groupHeader = (
+                                                    <div className={classes.group}>
+                                                        <Typography variant="h6">
+                                                            {group.toUpperCase()}
+                                                        </Typography>
+                                                        <IconButton onClick={addNewItem.bind(this, {[sort]: group})}
+                                                                    size="small">
+                                                            <AddIcon fontSize="small"/>
+                                                        </IconButton>
+                                                    </div>)
+                                            }
                                         }
                                         return (
                                             <div key={index}>

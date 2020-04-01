@@ -52,7 +52,7 @@ const PaperCmp = (props) => {
     if (props.item.mustBuy) {
         console.log(props);
         return (
-            <Paper {...props} elevation={20} style={{backgroundColor: props.item.color}}>
+            <Paper {...props} elevation={10} style={{backgroundColor: props.item.color}}>
                 {props.children}
             </Paper>
         )

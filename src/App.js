@@ -37,7 +37,7 @@ const privacyPolicyPage = asyncComponent(() => {
     return import ('./pages/PrivacyPolicy/PrivacyPolicy')
 });
 const detailsPage = asyncComponent(() => {
-    return import ('./pages/Details/details')
+    return import ('./pages/Details/Details')
 });
 
 /**

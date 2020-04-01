@@ -33,7 +33,7 @@ const styles = theme => ({
 
 let defaultImage = '';
 
-class ImageUppload extends Component {
+class ImageUpload extends Component {
 
     constructor(props) {
         super(props);
@@ -112,4 +112,4 @@ class ImageUppload extends Component {
 export default compose (
     withFirebase,
     withStyles(styles)
-)(ImageUppload)
+)(ImageUpload)
