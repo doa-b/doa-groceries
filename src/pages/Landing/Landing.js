@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Typography from "@material-ui/core/Typography";
 import {AuthUserContext} from "../../components/Session";
@@ -33,15 +33,20 @@ const Landing = withStyles(styles)(
                                 To use this app you need to <a href={ROUTES.SIGN_UP}>create an account</a>
                             </Typography>
                             <Typography variant="body1">
-                                or <a href={ROUTES.SIGN_UP}>sign in</a> with user
-                                name <b>example</b> and password <b>000000</b> for a demo
+                                or <Link to={{
+                                pathname: ROUTES.SIGN_IN,
+                                state: {email: 'example@test.com', password: '000000'}
+                            }}>sign in with a demo account</Link>:
+                            </Typography>
+                            <Typography variant="body1">
+                                email <b> example@test.com</b>, password <b> 000000</b>
                             </Typography>
 
                         </div>
                     )
                 }}
             </AuthUserContext.Consumer>
-         );
+        );
     });
 
 export default Landing;

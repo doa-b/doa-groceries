@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {compose} from 'redux';
-import { SignUpLink } from '../SignUp/SignUp';
+import {SignUpLink} from '../SignUp/SignUp';
 import {PasswordForgetLink} from '../index';
-import { withFirebase} from '../../../components/Firebase';
+import {withFirebase} from '../../../components/Firebase';
 import * as ROUTES from '../../../shared/routes';
 import {withStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -11,6 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import {updateObject} from "../../../shared/utility";
 
 const styles = theme => ({
     '@global': {
@@ -51,6 +52,17 @@ class SignInPage extends Component {
     constructor(props) {
         super(props);
         this.state = {...INITIAL_STATE};
+    }
+
+    componentDidMount() {
+        if (this.props.location && this.props.location.state) {
+            console.log(this.props.location.state);
+            this.setState(updateObject(this.state,
+                {
+                    email: this.props.location.state.email,
+                    password: this.props.location.state.password
+                }))
+        }
     }
 
     onSubmit = event => {

@@ -3,13 +3,8 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom'
 import { pageTitle } from '../../shared/routes';
 
-
-
-
 import MyToolbar from '../../components/ui/MyToolbar/MyToolbar';
 import MySideDrawer from '../../components/ui/MySideDrawer/MySideDrawer';
-
-
 
 /**
  * Created by Doa on 23-10-2019.
